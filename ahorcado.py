@@ -7,6 +7,7 @@ class HangmanGame:
         self.root = root
         self.root.title("Juego del Ahorcado")
         
+        self.words = ["metallica", "megadeth", "slayer", "ironmaiden", "pantera"]
         self.word_to_guess = self.choose_word()
         self.guessed_letters = []
         self.attempts = 6
@@ -26,8 +27,7 @@ class HangmanGame:
         self.update_attempts_label()
     
     def choose_word(self):
-        words = ["python", "programming", "hangman", "developer", "coding"]
-        return random.choice(words)
+        return random.choice(self.words)
 
     def display(self):
         display_word = ""
@@ -44,6 +44,11 @@ class HangmanGame:
 
     def make_guess(self):
         guess = self.input_entry.get().lower()
+
+        if guess == self.word_to_guess:
+            messagebox.showinfo("Victoria", f"¡Felicidades! ¡Has adivinado la palabra: {self.word_to_guess}")
+            self.restart()
+            return
 
         if len(guess) != 1 or not guess.isalpha():
             messagebox.showinfo("Error", "Ingresa una única letra válida.")
