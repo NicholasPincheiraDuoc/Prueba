@@ -10,3 +10,6 @@ for _ in range(4):
 
 # Mantener la ventana abierta hasta que se cierre manualmente
 turtle.done()
+
+
+#### El nicholas paso acá la lengua####
