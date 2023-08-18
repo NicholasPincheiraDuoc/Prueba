@@ -24,6 +24,16 @@ class HangmanGame:
         self.restart_button = tk.Button(root, text="Reiniciar", command=self.restart)
         self.restart_button.pack()
 
+        self.hangman_images = [
+            "  O  ",
+            " /|\\ ",
+            " / \\ "
+        ]
+        self.current_hangman_stage = 0
+
+        self.hangman_image_label = tk.Label(root, text="\n".join(self.hangman_images[:self.current_hangman_stage + 1]))
+        self.hangman_image_label.pack()
+
         self.update_attempts_label()
     
     def choose_word(self):
@@ -39,7 +49,7 @@ class HangmanGame:
         return display_word
 
     def update_attempts_label(self):
-        attempts_label = tk.Label(root, text=f"Intentos restantes: {self.attempts}")
+        attempts_label = tk.Label(self.root, text=f"Intentos restantes: {self.attempts}")
         attempts_label.pack()
 
     def make_guess(self):
@@ -66,8 +76,10 @@ class HangmanGame:
                 messagebox.showinfo("Perdiste", f"¡Perdiste! La palabra era: {self.word_to_guess}")
                 self.restart()
             else:
-                messagebox.showinfo("Incorrecto", f"¡Incorrecto! Te quedan {self.attempts} intentos.")
+                self.current_hangman_stage += 1
                 self.update_attempts_label()
+                self.update_hangman_image()
+                messagebox.showinfo("Incorrecto", f"¡Incorrecto! Te quedan {self.attempts} intentos.")
         else:
             if "_" not in self.display():
                 messagebox.showinfo("Victoria", f"¡Felicidades! ¡Has adivinado la palabra: {self.word_to_guess}")
@@ -77,6 +89,9 @@ class HangmanGame:
 
         self.input_entry.delete(0, tk.END)
 
+    def update_hangman_image(self):
+        self.hangman_image_label.config(text="\n".join(self.hangman_images[:self.current_hangman_stage + 1]))
+
     def update_word_label(self):
         self.word_label.config(text=self.display())
 
@@ -84,7 +99,9 @@ class HangmanGame:
         self.word_to_guess = self.choose_word()
         self.guessed_letters = []
         self.attempts = 6
+        self.current_hangman_stage = 0
         self.update_word_label()
+        self.update_hangman_image()
         self.update_attempts_label()
 
 root = tk.Tk()
